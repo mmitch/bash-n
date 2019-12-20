@@ -1,0 +1,122 @@
+#!/bin/bash
+
+# bash-tests - bash library for unit and integration tests
+#
+# Copyright (C) 2019  Christian Garbs <mitch@cgarbs.de>
+# Licensed under GNU GPL v3 or later.
+#
+# This file is part of bash-n.
+#
+# bash-n is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# bash-n is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with bash-n.  If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+
+# $1 TEST NAME
+start_test()
+{
+    echo "$1:" >&2
+    echo "{"   >&2
+}
+
+# $1 TEST NAME
+end_test()
+{
+    echo "}" >&2
+}
+
+# $1 ACTUAL VALUE
+# $2 EXPECTED VALUE
+assert_equals()
+{
+    local actual=$1 expected=$2
+
+    if [ "$actual" != "$expected" ]; then
+	fail "!! expected <$expected> but got <$actual>"
+    fi
+}
+
+# $1 ACTUAL VALUE
+# $2 OPERATION
+# $3 EXPECTED VALUE
+assert_that()
+{
+    local actual=$1 op=$2 expected=$3
+
+    case $op in
+	is)
+	    assert_equals "$actual" "$expected"
+	    ;;
+	*)
+	    fail "!! unknown operation <$op> in assertion" >&2
+	    ;;
+    esac
+
+    echo "   assertion <$op> ok" >&2
+}
+
+assert_stdout()
+{
+    export tmpdir
+    (
+	cd "$tmpdir"
+	cat > expected
+	cp stdout actual
+
+	if ! cmp -s expected actual; then
+	    diff -Narup expected actual >&2
+	    fail "!! output differs"
+	fi
+    )
+
+    echo "   assertion stdout is ok" >&2
+}
+
+# $* MESSAGE
+fail()
+{
+    echo "$*" >&2
+    exit 1
+}
+
+tmpdir=$(mktemp -d)
+trap "rm -rf '$tmpdir'" EXIT
+
+test_method_file=$tmpdir/tests
+declare -F | sed 's/^declare -f //' | grep ^test_ | sort -R > $test_method_file
+read -r test_count _ <<< $(wc -l "$test_method_file")
+
+test_stdout=$tmpdir/stdout
+
+if [ "$test_count" -lt 1 ]; then
+    fail "no tests defined"
+fi
+
+test_ok=0
+
+while IFS= read -u 9 -r test_name; do
+    start_test "$test_name"
+    exec > "$test_stdout"
+    before_test
+    $test_name
+    end_test "$test_name"
+    test_ok=$((test_ok + 1))
+done 9<"$test_method_file" 
+
+printf "%d/%d tests ok\n" $test_ok $test_count >&2
+
+if [ $test_count != $test_ok ]; then
+    fail "some test executions are missing!"
+fi
+
+exit 0

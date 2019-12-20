@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# bash-n-client - bash library for connect-n game clients
+#
+# Copyright (C) 2019  Christian Garbs <mitch@cgarbs.de>
+# Licensed under GNU GPL v3 or later.
+#
+# This file is part of bash-n.
+#
+# bash-n is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# bash-n is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with bash-n.  If not, see <http://www.gnu.org/licenses/>.
+
+bash_n_state=UNDEFINED
+
+# $1 COMMAND to send
+# $* ARGUMENTS to send
+send()
+{
+    local command=$1 arg1=$2
+    if [ $arg1 ]; then
+	printf "%s:%s;\n" "$command" "$arg1"
+    else
+	printf "%s;\n" "$command"
+    fi
+}
+
+# $* MESSAGE
+die()
+{
+    echo "$*" >&2
+    exit 1
+}
+
+# $1 NAME of the client
+start_client()
+{
+    local name=$1
+    
+    bash_n_state=CONNECTING
+    send REGISTER "$name"
+
+    while IFS= read -ra line; do
+	local cmd=${line[0]}
+	case ${bash_c_client}-${cmd} in
+	    *)
+		die "received unknown command <$cmd> in state <$bash_n_state>"
+		;;
+	esac
+    done
+}
