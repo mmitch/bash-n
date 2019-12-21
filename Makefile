@@ -18,6 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with bash-n.  If not, see <http://www.gnu.org/licenses/>.
 
+SHELL=bash
+
 all:	test
 
 clean:
@@ -25,3 +27,11 @@ clean:
 
 test:
 	./bash-n-client.test
+
+autotest: test
+	inotifywait -m -e modify -e create -e delete -e close_write -e move -r . | \
+	while read -r EVENT; do \
+		while read -r -t 0.1 EVENT; do :; done; \
+		$(MAKE) test; \
+	done
+
