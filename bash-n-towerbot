@@ -1,0 +1,74 @@
+#!/bin/bash
+
+# bash-n-towerbot - very simple bot to demonstrate the bash-n-client library
+#
+#    towerbot implements this simple strategy:
+#       $column := 4
+#       repeat forever {
+#          if $column is filled then $column := random non-filled column
+#          make move in $column
+#       }
+#
+#    To connect to a SERVER on PORT via UDP, run this script like this:
+#    $ socat udp:SERVER:PORT exec:bash-n-simplebot
+#
+# Copyright (C) 2019  Christian Garbs <mitch@cgarbs.de>
+# Licensed under GNU GPL v3 or later.
+#
+# This file is part of bash-n.
+#
+# bash-n is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# bash-n is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with bash-n.  If not, see <http://www.gnu.org/licenses/>.
+
+source bash-n-client
+
+calculate_move()
+{
+    if column_is_available; then
+	return $column
+    fi
+    
+    while true; do
+	column=$(( ($RANDOM % 7) + 1)) # this will be biased!
+	if column_is_available; then
+	    return $column
+	fi
+    done
+}
+
+column_is_available()
+{
+    [ ${field[$column]} -lt 6 ]
+}
+
+record_move()
+{
+    local who=$1 column=$2
+    field[$column]=$((${field[$column]} + 1))
+    log "${field[*]}"
+}
+
+game_start()
+{
+    for column in 1 2 3 4 5 6 7; do
+	field[$column]=0
+    done
+    column=4
+}
+
+game_end()
+{
+    log "$@"
+}
+
+start_client towerbot
