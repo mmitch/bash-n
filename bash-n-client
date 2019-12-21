@@ -62,8 +62,14 @@ bash_n_state=UNDEFINED
 # $* MESSAGE
 die()
 {
-    echo "$*" >&2
+    log "$@"
     exit 1
+}
+
+# $* MESSAGE
+log()
+{
+    echo "$*" >&2
 }
 
 # $1 COMMAND to send
