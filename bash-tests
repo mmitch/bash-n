@@ -22,6 +22,18 @@
 
 set -e
 
+if tput sgr0 2>&1 >/dev/null; then
+    term_normal=$(tput sgr0)
+    term_error=$(tput setaf 1)
+    term_success=$(tput setaf 2)
+else
+    term_normal=
+    term_error=
+    term_success=
+fi
+
+echo -n $term_normal
+
 # $1 TEST NAME
 start_test()
 {
@@ -85,7 +97,7 @@ assert_stdout()
 # $* MESSAGE
 fail()
 {
-    echo "$*" >&2
+    echo "${term_error}$*${term_normal}" >&2
     exit 1
 }
 
@@ -108,12 +120,20 @@ while IFS= read -u 9 -r test_name; do
     start_test "$test_name"
     exec > "$test_stdout"
     before_test
-    $test_name
+    $test_name || fail "execution failed"
     end_test "$test_name"
     test_ok=$((test_ok + 1))
 done 9<"$test_method_file" 
 
-printf "%d/%d tests ok\n" $test_ok $test_count >&2
+if [ $test_count == $test_ok ]; then
+    tests_ok=true
+    echo -n $term_success
+else
+    tests_ok=false
+    echo -n $term_error
+fi
+
+printf "%d/%d tests ok%s\n" $test_ok $test_count $term_normal >&2
 
 if [ $test_count != $test_ok ]; then
     fail "some test executions are missing!"
