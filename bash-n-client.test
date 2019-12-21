@@ -41,20 +41,20 @@ before_test()
     record_move()
     {
 	local who=$1 column=$2
-	bash_n_moves+="$who@$column,"
+	test_moves+="$who@$column,"
     }
 
     game_start()
     {
-	bash_n_opponent=$1
-	bash_n_moves=
+	test_opponent=$1
+	test_moves=
     }
 
     game_end()
     {
-	bash_n_result_what=$1
-	bash_n_result_who=$2
-	bash_n_result_why=$3
+	test_result_what=$1
+	test_result_who=$2
+	test_result_why=$3
     }
 }
 
@@ -146,7 +146,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that variable bash_n_opponent is OTHER-NAME
+    assert_that variable test_opponent is OTHER-NAME
 }
 
 test_on_turn_a_tile_is_placed()
@@ -196,7 +196,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that variable bash_n_moves is MY-NAME@2,OTHER-NAME@4,MY-NAME@3,
+    assert_that variable test_moves is MY-NAME@2,OTHER-NAME@4,MY-NAME@3,
 }
 
 test_on_game_result_nothing_is_sent()
@@ -225,9 +225,9 @@ EOF
 
     start_client MY-NAME
 
-    assert_that variable bash_n_result_what is WIN
-    assert_that variable bash_n_result_who  is OTHER-NAME
-    assert_that variable bash_n_result_why  is "a better bot"
+    assert_that variable test_result_what is WIN
+    assert_that variable test_result_who  is OTHER-NAME
+    assert_that variable test_result_why  is "a better bot"
 }
 
 test_game_result_sets_state_season()
