@@ -185,16 +185,16 @@ while IFS= read -u 9 -r test_name; do
 done 9<"$test_method_file" 
 
 if [ $test_count == $test_ok ]; then
-    tests_ok=true
+    tests_missing=false
     echo -n $term_success >&2
 else
-    tests_ok=false
+    tests_missing=true
     echo -n $term_error >&2
 fi
 
 printf "%d/%d tests ok%s\n" $test_ok $test_count $term_normal >&2
 
-if [ $test_count != $test_ok ]; then
+if $tests_missing; then
     fail "some test executions are missing!"
 fi
 
