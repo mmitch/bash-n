@@ -47,38 +47,42 @@ end_test()
     echo "}" >&2
 }
 
-# $1 ACTUAL VALUE
-# $2 EXPECTED VALUE
+# $1 ACTUAL value
+# $2 EXPECTED value
 assert_equals()
 {
     local actual=$1 expected=$2
 
     if [ "$actual" != "$expected" ]; then
-	fail "!! expected <$expected> but got <$actual>"
+	fail "expected <$expected> but got <$actual>"
     fi
 }
 
-# $1 ACTUAL VALUE
-# $2 OPERATION
-# $3 EXPECTED VALUE
-assert_that()
+# $1 VARIABLE to check
+# $2 VERB describing the check
+# $* PARAMETERS depending on VERB
+assert_variable()
 {
-    local actual=$1 op=$2 expected=$3
+    local variable=$1 verb=$2 expected=$3
 
-    case $op in
+    echo -n "   check \$$variable: " >&2
+
+    case $verb in
 	is)
-	    assert_equals "$actual" "$expected"
+	    assert_equals "${!variable}" "$expected"
 	    ;;
 	*)
-	    fail "!! unknown operation <$op> in assertion" >&2
+	    fail "unknown verb <$verb> in assert_variable" >&2
 	    ;;
     esac
 
-    echo "   assert <$op>: ok" >&2
+    echo "ok" >&2
 }
 
 assert_stdout()
 {
+    echo -n "   check stdout: " >&2
+
     export tmpdir
     (
 	cd "$tmpdir"
@@ -91,8 +95,29 @@ assert_stdout()
 	fi
     )
 
-    echo "   assert stdout: ok" >&2
+    echo "ok" >&2
 }
+
+# $1 SUBJECT to check
+# $* PARAMETERS depending on SUBJECT
+assert_that()
+{
+    local subject=$1
+    shift
+
+    case $subject in
+	variable)
+	    assert_variable "${@}"
+	    ;;
+	stdout)
+	    assert_stdout "${@}"
+	    ;;
+	*)
+	    fail "unknown test subject <$subject> in assert_that" >&2
+	    ;;
+    esac
+}
+
 
 # $* MESSAGE
 fail()

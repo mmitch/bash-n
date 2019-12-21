@@ -62,7 +62,7 @@ before_test()
 
 test_initial_state_is_undefined()
 {
-    assert_that "$bash_n_state" is UNDEFINED
+    assert_that variable bash_n_state is UNDEFINED
 }
 
 test_start_client_sets_state_connecting()
@@ -71,7 +71,7 @@ test_start_client_sets_state_connecting()
 
     start_client
     
-    assert_that "$bash_n_state" is CONNECTING
+    assert_that variable bash_n_state is CONNECTING
 }
 
 test_start_client_sends_registration()
@@ -80,7 +80,7 @@ test_start_client_sends_registration()
 
     start_client MY-NAME
     
-    assert_stdout <<EOF
+    assert_that stdout <<EOF
 REGISTER;MY-NAME
 EOF
 }
@@ -93,7 +93,7 @@ EOF
 
     start_client MY-NAME
     
-    assert_stdout <<EOF
+    assert_that stdout <<EOF
 REGISTER;MY-NAME
 JOIN;58ca8b44
 EOF
@@ -107,7 +107,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that "$bash_n_state" is SEASON
+    assert_that variable bash_n_state is SEASON
 }
 
 test_on_game_start_nothing_is_sent()
@@ -119,7 +119,7 @@ EOF
 
     start_client MY-NAME
     
-    assert_stdout <<EOF
+    assert_that stdout <<EOF
 REGISTER;MY-NAME
 JOIN;58ca8b44
 EOF
@@ -134,7 +134,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that "$bash_n_state" is GAME
+    assert_that variable bash_n_state is GAME
 }
 
 test_game_start_records_opponent()
@@ -146,7 +146,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that "$bash_n_opponent" is OTHER-NAME
+    assert_that variable bash_n_opponent is OTHER-NAME
 }
 
 test_on_turn_a_tile_is_placed()
@@ -159,7 +159,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_stdout <<EOF
+    assert_that stdout <<EOF
 REGISTER;MY-NAME
 JOIN;58ca8b44
 INSERT;4;758f30a5
@@ -178,7 +178,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_stdout <<EOF
+    assert_that stdout <<EOF
 REGISTER;MY-NAME
 JOIN;58ca8b44
 EOF
@@ -196,7 +196,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that "$bash_n_moves" is MY-NAME@2,OTHER-NAME@4,MY-NAME@3,
+    assert_that variable bash_n_moves is MY-NAME@2,OTHER-NAME@4,MY-NAME@3,
 }
 
 test_on_game_result_nothing_is_sent()
@@ -209,7 +209,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_stdout <<EOF
+    assert_that stdout <<EOF
 REGISTER;MY-NAME
 JOIN;58ca8b44
 EOF
@@ -225,9 +225,9 @@ EOF
 
     start_client MY-NAME
 
-    assert_that "$bash_n_result_what" is WIN
-    assert_that "$bash_n_result_who"  is OTHER-NAME
-    assert_that "$bash_n_result_why"  is "a better bot"
+    assert_that variable bash_n_result_what is WIN
+    assert_that variable bash_n_result_who  is OTHER-NAME
+    assert_that variable bash_n_result_why  is "a better bot"
 }
 
 test_game_result_sets_state_season()
@@ -240,7 +240,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that "$bash_n_state" is SEASON
+    assert_that variable bash_n_state is SEASON
 }
 
 ############################
