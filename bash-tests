@@ -92,19 +92,6 @@ _scan_test_methods()
     fi
 }
 
-# $1 TEST NAME
-_start_test()
-{
-    echo "$1:" >&2
-    echo "{"   >&2
-}
-
-# $1 TEST NAME
-_end_test()
-{
-    echo "}" >&2
-}
-
 # $1 ACTUAL value
 # $2 EXPECTED value
 _assert_equals()
@@ -161,10 +148,9 @@ _run_test()
 {
     local test_stdout=$tmpdir/stdout
 
-    _start_test "$test_name"
+    echo "$test_name" >&2
     before_test
     $test_name > "$test_stdout" || fail "execution failed"
-    _end_test "$test_name"
     test_ok_count=$((test_ok_count + 1))
 }
 
