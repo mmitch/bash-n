@@ -52,6 +52,31 @@ REGISTER;MY-NAME
 EOF
 }
 
+test_on_season_start_a_join_is_sent()
+{
+    exec <<EOF
+NEW SEASON;58ca8b44
+EOF
+
+    start_client MY-NAME
+    
+    assert_stdout <<EOF
+REGISTER;MY-NAME
+JOIN;58ca8b44
+EOF
+}
+
+test_on_season_start_sets_state_season()
+{
+    exec <<EOF
+NEW SEASON;58ca8b44
+EOF
+
+    start_client MY-NAME
+    
+    assert_that $bash_n_state is SEASON
+}
+
 ############################
 
 source bash-tests
