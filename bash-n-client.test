@@ -84,17 +84,6 @@ EOF
     assert_that "$bash_n_state" is SEASON
 }
 
-test_season_start_records_season_hash()
-{
-    exec <<EOF
-NEW SEASON;58ca8b44
-EOF
-
-    start_client MY-NAME
-
-    assert_that "$bash_n_season" is 58ca8b44
-}
-
 test_on_game_start_nothing_is_sent()
 {
     exec <<EOF

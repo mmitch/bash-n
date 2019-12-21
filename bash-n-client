@@ -55,9 +55,9 @@ send()
 # $1 SEASON HASH
 on_new_season()
 {
-    bash_n_season=$1
+    local hash=$1
     bash_n_state=SEASON
-    send JOIN "$bash_n_season"
+    send JOIN "$hash"
 }
 
 # $1 OPPONENT
@@ -72,7 +72,7 @@ on_execute_turn()
 {
     local hash=$1
     calculate_move
-    send INSERT $? $hash
+    send INSERT $? "$hash"
 }
 
 # $1 NAME of the client
