@@ -24,12 +24,11 @@
 
 # overwrite these hooks with your own strategy
 
-# gets called when it is out turn
+# gets called when it is our turn
 # RETURN the column number [1-7] of your move
 calculate_move()
 {
-    echo "warning: default implementation of calculate_move() was called - overwrite this!" >&2
-    return 4
+    die "no implementation of calculate_move() - overwrite this function!"
 }
 
 # gets called when the server has received a move in the current game
@@ -37,17 +36,14 @@ calculate_move()
 # $2 COLUMN [1-7] where the move was made
 record_move()
 {
-    echo "warning: default implementation of record_move() was called - overwrite this!" >&2
-    local who=$1 column=$2
-    bash_n_moves+=$2
+    die "no implementation of record_move() - overwrite this function!"
 }
 
 # gets called when a new game starts - use this to reset game state
 # $1 CLIENT NAME of our opponent
 game_start()
 {
-    echo "warning: default implementation of game_start() was called - overwrite this!" >&2
-    bash_n_moves=""
+    die "no implementation of game_start() - overwrite this function!"
 }
 
 ############################

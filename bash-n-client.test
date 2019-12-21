@@ -30,6 +30,25 @@ before_test()
 	echo "$*"
 	return 1
     }
+
+    # implement all game hooks to check passed parameters
+    calculate_move()
+    {
+	return 4
+    }
+
+    record_move()
+    {
+	local who=$1 column=$2
+	bash_n_moves+="$who@$column,"
+    }
+
+    game_start()
+    {
+	bash_n_opponent=$1
+	bash_n_moves=()
+    }
+
 }
 
 ############################
@@ -158,7 +177,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that "$bash_n_moves" is 243
+    assert_that "${bash_n_moves[*]}" is "MY-NAME@2,OTHER-NAME@4,MY-NAME@3,"
 }
 
 ############################
