@@ -74,7 +74,7 @@ assert_that()
 	    ;;
     esac
 
-    echo "   assertion <$op> ok" >&2
+    echo "   assert <$op>: ok" >&2
 }
 
 assert_stdout()
@@ -91,7 +91,7 @@ assert_stdout()
 	fi
     )
 
-    echo "   assertion stdout is ok" >&2
+    echo "   assert stdout: ok" >&2
 }
 
 # $* MESSAGE
@@ -127,10 +127,10 @@ done 9<"$test_method_file"
 
 if [ $test_count == $test_ok ]; then
     tests_ok=true
-    echo -n $term_success
+    echo -n $term_success >&2
 else
     tests_ok=false
-    echo -n $term_error
+    echo -n $term_error >&2
 fi
 
 printf "%d/%d tests ok%s\n" $test_ok $test_count $term_normal >&2
