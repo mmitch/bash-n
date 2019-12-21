@@ -24,14 +24,31 @@
 
 # overwrite these hooks with your own strategy
 
-# RETURN the column number of your move [1-7]
+# gets called when it is out turn
+# RETURN the column number [1-7] of your move
 calculate_move()
 {
     echo "warning: default implementation of calculate_move() was called - overwrite this!" >&2
     return 4
 }
 
+# gets called when the server has received a move in the current game
+# $1 CLIENT NAME that made the move
+# $2 COLUMN [1-7] where the move was made
+record_move()
+{
+    echo "warning: default implementation of record_move() was called - overwrite this!" >&2
+    local who=$1 column=$2
+    bash_n_moves+=$2
+}
 
+# gets called when a new game starts - use this to reset game state
+# $1 CLIENT NAME of our opponent
+game_start()
+{
+    echo "warning: default implementation of game_start() was called - overwrite this!" >&2
+    bash_n_moves=""
+}
 
 ############################
 
@@ -63,8 +80,9 @@ on_new_season()
 # $1 OPPONENT
 on_new_game()
 {
-    bash_n_opponent=$1
+    local opponent=$1
     bash_n_state=GAME
+    game_start "$opponent"
 }
 
 # $1 TURN HASH
@@ -94,6 +112,9 @@ start_client()
 		;;
 	    GAME-YOURTURN)
 		on_execute_turn "${line[1]}"
+		;;
+	    GAME-TOKEN\ INSERTED)
+		record_move "${line[1]}" "${line[2]}"
 		;;
 	    *)
 		die "received unknown command <$cmd> in state <$bash_n_state>"

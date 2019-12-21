@@ -111,18 +111,6 @@ EOF
     assert_that "$bash_n_state" is GAME
 }
 
-test_game_start_records_opponent()
-{
-    exec <<EOF
-NEW SEASON;58ca8b44
-NEW GAME;OTHER-NAME
-EOF
-
-    start_client MY-NAME
-
-    assert_that "$bash_n_opponent" is OTHER-NAME
-}
-
 test_on_turn_a_tile_is_placed()
 {
     exec <<EOF
@@ -138,6 +126,39 @@ REGISTER;MY-NAME
 JOIN;58ca8b44
 INSERT;4;758f30a5
 EOF
+}
+
+test_on_token_inserted_nothing_is_sent()
+{
+    exec <<EOF
+NEW SEASON;58ca8b44
+NEW GAME;OTHER-NAME
+TOKEN INSERTED;MY-NAME;2
+TOKEN INSERTED;OTHER-NAME;4
+TOKEN INSERTED;MY-NAME;3
+EOF
+
+    start_client MY-NAME
+
+    assert_stdout <<EOF
+REGISTER;MY-NAME
+JOIN;58ca8b44
+EOF
+}
+
+test_placed_tokens_are_recorded()
+{
+    exec <<EOF
+NEW SEASON;58ca8b44
+NEW GAME;OTHER-NAME
+TOKEN INSERTED;MY-NAME;2
+TOKEN INSERTED;OTHER-NAME;4
+TOKEN INSERTED;MY-NAME;3
+EOF
+
+    start_client MY-NAME
+
+    assert_that "$bash_n_moves" is 243
 }
 
 ############################
