@@ -20,9 +20,12 @@
 # You should have received a copy of the GNU General Public License
 # along with bash-n.  If not, see <http://www.gnu.org/licenses/>.
 
-############################
+set -e
 
+############################
+#
 # public test interface
+#
 
 # perform an assertion
 # $1 SUBJECT to check
@@ -54,20 +57,40 @@ fail()
 }
 
 ############################
+#
+# private methods
+#
 
-set -e
+_setup_colors()
+{
+    if tput sgr0 2>&1 >/dev/null; then
+	term_normal=$(tput sgr0)
+	term_error=$(tput setaf 1)
+	term_success=$(tput setaf 2)
+    else
+	term_normal=
+	term_error=
+	term_success=
+    fi
 
-if tput sgr0 2>&1 >/dev/null; then
-    term_normal=$(tput sgr0)
-    term_error=$(tput setaf 1)
-    term_success=$(tput setaf 2)
-else
-    term_normal=
-    term_error=
-    term_success=
-fi
+    echo -n $term_normal
+}
 
-echo -n $term_normal
+_create_tmpdir()
+{
+    tmpdir=$(mktemp -d)
+    trap "rm -rf '$tmpdir'" EXIT
+}
+
+_scan_test_methods()
+{
+    test_method_file=$tmpdir/tests
+    declare -F | sed 's/^declare -f //' | grep ^test_ | sort -R > $test_method_file
+    read -r test_count _ <<< $(wc -l "$test_method_file")
+    if [ "$test_count" -lt 1 ]; then
+	fail "no tests defined"
+    fi
+}
 
 # $1 TEST NAME
 _start_test()
@@ -133,28 +156,32 @@ _assert_stdout()
     echo "ok" >&2
 }
 
-tmpdir=$(mktemp -d)
-trap "rm -rf '$tmpdir'" EXIT
+# $1 TEST NAME is the declared bash function to call
+_run_test()
+{
+    local test_stdout=$tmpdir/stdout
 
-test_method_file=$tmpdir/tests
-declare -F | sed 's/^declare -f //' | grep ^test_ | sort -R > $test_method_file
-read -r test_count _ <<< $(wc -l "$test_method_file")
-
-test_stdout=$tmpdir/stdout
-
-if [ "$test_count" -lt 1 ]; then
-    fail "no tests defined"
-fi
-
-test_ok=0
-
-while IFS= read -u 9 -r test_name; do
     _start_test "$test_name"
     exec > "$test_stdout"
     before_test
     $test_name || fail "execution failed"
     _end_test "$test_name"
     test_ok=$((test_ok + 1))
+}
+
+############################
+#
+# test execution
+#
+
+_setup_colors
+_create_tmpdir
+_scan_test_methods
+
+test_ok=0
+
+while IFS= read -u 9 -r test_name; do
+    _run_test "$test_name"
 done 9<"$test_method_file" 
 
 if [ $test_count == $test_ok ]; then
