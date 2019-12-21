@@ -130,6 +130,18 @@ EOF
     assert_that "$bash_n_state" is GAME
 }
 
+test_game_start_records_opponent()
+{
+    exec <<EOF
+NEW SEASON;58ca8b44
+NEW GAME;OTHER-NAME
+EOF
+
+    start_client MY-NAME
+
+    assert_that "$bash_n_opponent" is OTHER-NAME
+}
+
 test_on_turn_a_tile_is_placed()
 {
     exec <<EOF
@@ -177,7 +189,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that "${bash_n_moves[*]}" is "MY-NAME@2,OTHER-NAME@4,MY-NAME@3,"
+    assert_that "$bash_n_moves" is MY-NAME@2,OTHER-NAME@4,MY-NAME@3,
 }
 
 ############################
