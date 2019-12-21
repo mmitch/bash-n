@@ -39,11 +39,20 @@ record_move()
     die "no implementation of record_move() - overwrite this function!"
 }
 
-# gets called when a new game starts - use this to reset game state
+# gets called when a new game starts - use this to init or reset game state
 # $1 CLIENT NAME of our opponent
 game_start()
 {
     die "no implementation of game_start() - overwrite this function!"
+}
+
+# gets called when a game ends
+# $1 RESULT is one of [WIN|DRAW|LOSE]
+# $2 CLIENT NAME that scored the result
+# $3 REASON of the result
+game_end()
+{
+    die "no implementation of game_end() - overwrite this function!"
 }
 
 ############################
@@ -89,6 +98,16 @@ on_execute_turn()
     send INSERT $? "$hash"
 }
 
+# $1 RESULT is one of [WIN|DRAW|LOSE]
+# $2 CLIENT NAME that scored the result
+# $3 REASON of the result
+on_game_result()
+{
+    local result=$1 who=$2 why=$3
+    bash_n_state=SEASON
+    game_end "$result" "$who" "$why"
+}
+
 # $1 NAME of the client
 start_client()
 {
@@ -111,6 +130,9 @@ start_client()
 		;;
 	    GAME-TOKEN\ INSERTED)
 		record_move "${line[1]}" "${line[2]}"
+		;;
+	    GAME-RESULT)
+		on_game_result "${line[1]}" "${line[2]}" "${line[3]}"
 		;;
 	    *)
 		die "received unknown command <$cmd> in state <$bash_n_state>"

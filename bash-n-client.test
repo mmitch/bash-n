@@ -31,12 +31,13 @@ before_test()
 	return 1
     }
 
-    # implement all game hooks to check passed parameters
+    # implement simple game logic for test
     calculate_move()
     {
 	return 4
     }
 
+    # store all passed parameters for test
     record_move()
     {
 	local who=$1 column=$2
@@ -46,9 +47,15 @@ before_test()
     game_start()
     {
 	bash_n_opponent=$1
-	bash_n_moves=()
+	bash_n_moves=
     }
 
+    game_end()
+    {
+	bash_n_result_what=$1
+	bash_n_result_who=$2
+	bash_n_result_why=$3
+    }
 }
 
 ############################
@@ -190,6 +197,50 @@ EOF
     start_client MY-NAME
 
     assert_that "$bash_n_moves" is MY-NAME@2,OTHER-NAME@4,MY-NAME@3,
+}
+
+test_on_game_result_nothing_is_sent()
+{
+    exec <<EOF
+NEW SEASON;58ca8b44
+NEW GAME;OTHER-NAME
+RESULT;DRAW;MY-NAME;the board is full
+EOF
+
+    start_client MY-NAME
+
+    assert_stdout <<EOF
+REGISTER;MY-NAME
+JOIN;58ca8b44
+EOF
+}
+
+test_game_result_is_passed_on()
+{
+    exec <<EOF
+NEW SEASON;58ca8b44
+NEW GAME;OTHER-NAME
+RESULT;WIN;OTHER-NAME;a better bot
+EOF
+
+    start_client MY-NAME
+
+    assert_that "$bash_n_result_what" is WIN
+    assert_that "$bash_n_result_who"  is OTHER-NAME
+    assert_that "$bash_n_result_why"  is "a better bot"
+}
+
+test_game_result_sets_state_season()
+{
+    exec <<EOF
+NEW SEASON;58ca8b44
+NEW GAME;OTHER-NAME
+RESULT;WIN;OTHER-NAME;a better bot
+EOF
+
+    start_client MY-NAME
+
+    assert_that "$bash_n_state" is SEASON
 }
 
 ############################
