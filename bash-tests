@@ -20,6 +20,41 @@
 # You should have received a copy of the GNU General Public License
 # along with bash-n.  If not, see <http://www.gnu.org/licenses/>.
 
+############################
+
+# public test interface
+
+# perform an assertion
+# $1 SUBJECT to check
+# $* PARAMETERS depending on SUBJECT
+assert_that()
+{
+    local subject=$1
+    shift
+
+    case $subject in
+	variable)
+	    _assert_variable "${@}"
+	    ;;
+	stdout)
+	    _assert_stdout "${@}"
+	    ;;
+	*)
+	    fail "unknown test subject <$subject> in assert_that" >&2
+	    ;;
+    esac
+}
+
+# fail the test with a message
+# $* MESSAGE
+fail()
+{
+    echo "${term_error}$*${term_normal}" >&2
+    exit 1
+}
+
+############################
+
 set -e
 
 if tput sgr0 2>&1 >/dev/null; then
@@ -35,21 +70,21 @@ fi
 echo -n $term_normal
 
 # $1 TEST NAME
-start_test()
+_start_test()
 {
     echo "$1:" >&2
     echo "{"   >&2
 }
 
 # $1 TEST NAME
-end_test()
+_end_test()
 {
     echo "}" >&2
 }
 
 # $1 ACTUAL value
 # $2 EXPECTED value
-assert_equals()
+_assert_equals()
 {
     local actual=$1 expected=$2
 
@@ -61,7 +96,7 @@ assert_equals()
 # $1 VARIABLE to check
 # $2 VERB describing the check
 # $* PARAMETERS depending on VERB
-assert_variable()
+_assert_variable()
 {
     local variable=$1 verb=$2 expected=$3
 
@@ -69,7 +104,7 @@ assert_variable()
 
     case $verb in
 	is)
-	    assert_equals "${!variable}" "$expected"
+	    _assert_equals "${!variable}" "$expected"
 	    ;;
 	*)
 	    fail "unknown verb <$verb> in assert_variable" >&2
@@ -79,7 +114,7 @@ assert_variable()
     echo "ok" >&2
 }
 
-assert_stdout()
+_assert_stdout()
 {
     echo -n "   check stdout: " >&2
 
@@ -98,34 +133,6 @@ assert_stdout()
     echo "ok" >&2
 }
 
-# $1 SUBJECT to check
-# $* PARAMETERS depending on SUBJECT
-assert_that()
-{
-    local subject=$1
-    shift
-
-    case $subject in
-	variable)
-	    assert_variable "${@}"
-	    ;;
-	stdout)
-	    assert_stdout "${@}"
-	    ;;
-	*)
-	    fail "unknown test subject <$subject> in assert_that" >&2
-	    ;;
-    esac
-}
-
-
-# $* MESSAGE
-fail()
-{
-    echo "${term_error}$*${term_normal}" >&2
-    exit 1
-}
-
 tmpdir=$(mktemp -d)
 trap "rm -rf '$tmpdir'" EXIT
 
@@ -142,11 +149,11 @@ fi
 test_ok=0
 
 while IFS= read -u 9 -r test_name; do
-    start_test "$test_name"
+    _start_test "$test_name"
     exec > "$test_stdout"
     before_test
     $test_name || fail "execution failed"
-    end_test "$test_name"
+    _end_test "$test_name"
     test_ok=$((test_ok + 1))
 done 9<"$test_method_file" 
 
