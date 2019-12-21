@@ -20,6 +20,21 @@
 # You should have received a copy of the GNU General Public License
 # along with bash-n.  If not, see <http://www.gnu.org/licenses/>.
 
+############################
+
+# overwrite these hooks with your own strategy
+
+# RETURN the column number of your move [1-7]
+calculate_move()
+{
+    echo "warning: default implementation of calculate_move() was called - overwrite this!" >&2
+    return 4
+}
+
+
+
+############################
+
 bash_n_state=UNDEFINED
 
 # $* MESSAGE
@@ -52,6 +67,14 @@ on_new_game()
     bash_n_state=GAME
 }
 
+# $1 TURN HASH
+on_execute_turn()
+{
+    local hash=$1
+    calculate_move
+    send INSERT $? $hash
+}
+
 # $1 NAME of the client
 start_client()
 {
@@ -68,6 +91,9 @@ start_client()
 		;;
 	    SEASON-NEW\ GAME)
 		on_new_game "${line[1]}"
+		;;
+	    GAME-YOURTURN)
+		on_execute_turn "${line[1]}"
 		;;
 	    *)
 		die "received unknown command <$cmd> in state <$bash_n_state>"
