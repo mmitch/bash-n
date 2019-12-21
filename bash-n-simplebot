@@ -2,6 +2,11 @@
 
 # bash-n-simplebot - very simple bot to demonstrate the bash-n-client library
 #
+#    simplebot implements this simple strategy:
+#       repeat forever {
+#          make move in random non-filled column
+#       }
+#
 #    To connect to a SERVER on PORT via UDP, run this script like this:
 #    $ socat udp:SERVER:PORT exec:bash-n-simplebot
 #
@@ -25,6 +30,37 @@
 # very simple bot to demonstrate the bash-n-client library
 
 source bash-n-client
+
+calculate_move()
+{
+    local column
+    while true; do
+	column=$(( ($RANDOM % 7) + 1)) # this will be biased!
+	if [ ${field[$column]} -lt 6 ]; then
+	    return $column
+	fi
+    done
+}
+
+record_move()
+{
+    local who=$1 column=$2
+    field[$column]=$((${field[$column]} + 1))
+    log "${field[*]}"
+}
+
+game_start()
+{
+    local column
+    for column in 1 2 3 4 5 6 7; do
+	field[$column]=0
+    done
+}
+
+game_end()
+{
+    log "$@"
+}
 
 start_client simplebot
 
