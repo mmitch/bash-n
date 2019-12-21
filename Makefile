@@ -28,7 +28,8 @@ clean:
 test:
 	./bash-n-client.test
 
-autotest: test
+autotest:
+	-$(MAKE) test
 	inotifywait -m -e modify -e create -e delete -e close_write -e move -r . | \
 	while read -r EVENT; do \
 		while read -r -t 0.1 EVENT; do :; done; \
