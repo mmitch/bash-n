@@ -26,12 +26,8 @@ bash_n_state=UNDEFINED
 # $* ARGUMENTS to send
 send()
 {
-    local command=$1 arg1=$2
-    if [ $arg1 ]; then
-	printf "%s:%s;\n" "$command" "$arg1"
-    else
-	printf "%s;\n" "$command"
-    fi
+    local IFS=';'
+    echo "$*"
 }
 
 # $* MESSAGE

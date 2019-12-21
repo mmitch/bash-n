@@ -48,7 +48,7 @@ test_start_client_sends_registration()
     start_client MY-NAME
     
     assert_stdout <<EOF
-REGISTER:MY-NAME;
+REGISTER;MY-NAME
 EOF
 }
 
