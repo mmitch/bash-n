@@ -166,7 +166,7 @@ _run_test()
     before_test
     $test_name || fail "execution failed"
     _end_test "$test_name"
-    test_ok=$((test_ok + 1))
+    test_ok_count=$((test_ok_count + 1))
 }
 
 ############################
@@ -178,13 +178,13 @@ _setup_colors
 _create_tmpdir
 _scan_test_methods
 
-test_ok=0
+test_ok_count=0
 
 while IFS= read -u 9 -r test_name; do
     _run_test "$test_name"
 done 9<"$test_method_file" 
 
-if [ $test_count == $test_ok ]; then
+if [ $test_count == $test_ok_count ]; then
     tests_missing=false
     echo -n $term_success >&2
 else
@@ -192,7 +192,7 @@ else
     echo -n $term_error >&2
 fi
 
-printf "%d/%d tests ok%s\n" $test_ok $test_count $term_normal >&2
+printf "%d/%d tests ok%s\n" $test_ok_count $test_count $term_normal >&2
 
 if $tests_missing; then
     fail "some test executions are missing!"
