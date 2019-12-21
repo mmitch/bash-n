@@ -162,9 +162,8 @@ _run_test()
     local test_stdout=$tmpdir/stdout
 
     _start_test "$test_name"
-    exec > "$test_stdout"
     before_test
-    $test_name || fail "execution failed"
+    $test_name > "$test_stdout" || fail "execution failed"
     _end_test "$test_name"
     test_ok_count=$((test_ok_count + 1))
 }
