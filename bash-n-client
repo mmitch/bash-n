@@ -45,6 +45,13 @@ on_new_season()
     send JOIN "$bash_n_season"
 }
 
+# $1 OPPONENT
+on_new_game()
+{
+    bash_n_opponent=$1
+    bash_n_state=GAME
+}
+
 # $1 NAME of the client
 start_client()
 {
@@ -58,6 +65,9 @@ start_client()
 	case "$bash_n_state-$cmd" in
 	    CONNECTING-NEW\ SEASON)
 		on_new_season "${line[1]}"
+		;;
+	    SEASON-NEW\ GAME)
+		on_new_game "${line[1]}"
 		;;
 	    *)
 		die "received unknown command <$cmd> in state <$bash_n_state>"
