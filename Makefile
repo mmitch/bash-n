@@ -18,15 +18,16 @@
 # You should have received a copy of the GNU General Public License
 # along with bash-n.  If not, see <http://www.gnu.org/licenses/>.
 
-SHELL=bash
+SHELL     := bash
+TESTS     := $(wildcard *.test)
+TEST_RUNS := $(patsubst %.test,%.test.run,$(TESTS))
 
 all:	test
 
 clean:
 	rm -f *~
 
-test:
-	./bash-n-client.test
+test:	$(TEST_RUNS)
 
 autotest:
 	-$(MAKE) test
@@ -36,3 +37,5 @@ autotest:
 		$(MAKE) test; \
 	done
 
+%.test.run: %.test
+	$(SHELL) $<

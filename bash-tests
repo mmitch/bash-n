@@ -61,6 +61,16 @@ fail()
 # private methods
 #
 
+_add_empty_before_test_if_missing()
+{
+    if ! declare -F before_test; then
+	before_test()
+	{
+	    :
+	}
+    fi
+}
+
 _setup_colors()
 {
     if tput sgr0 2>&1 >/dev/null; then
@@ -162,6 +172,7 @@ _run_test()
 _setup_colors
 _create_tmpdir
 _scan_test_methods
+_add_empty_before_test_if_missing
 
 test_ok_count=0
 
