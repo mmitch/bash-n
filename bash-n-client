@@ -28,7 +28,7 @@
 # RETURN the column number [1-7] of your move
 calculate_move()
 {
-    die "no implementation of calculate_move() - overwrite this function!"
+    _die "no implementation of calculate_move() - overwrite this function!"
 }
 
 # gets called when the server has received a move in the current game
@@ -36,14 +36,14 @@ calculate_move()
 # $2 COLUMN [1-7] where the move was made
 record_move()
 {
-    die "no implementation of record_move() - overwrite this function!"
+    _die "no implementation of record_move() - overwrite this function!"
 }
 
 # gets called when a new game starts - use this to init or reset game state
 # $1 CLIENT NAME of our opponent
 game_start()
 {
-    die "no implementation of game_start() - overwrite this function!"
+    _die "no implementation of game_start() - overwrite this function!"
 }
 
 # gets called when a game ends
@@ -52,7 +52,7 @@ game_start()
 # $3 REASON of the result
 game_end()
 {
-    die "no implementation of game_end() - overwrite this function!"
+    _die "no implementation of game_end() - overwrite this function!"
 }
 
 ############################
@@ -60,7 +60,7 @@ game_end()
 bash_n_state=UNDEFINED
 
 # $* MESSAGE
-die()
+_die()
 {
     log "$@"
     exit 1
@@ -74,22 +74,22 @@ log()
 
 # $1 COMMAND to send
 # $* ARGUMENTS to send
-send()
+_send()
 {
     local IFS=';'
     echo "$*"
 }
 
 # $1 SEASON HASH
-on_new_season()
+_on_new_season()
 {
     local hash=$1
     bash_n_state=SEASON
-    send JOIN "$hash"
+    _send JOIN "$hash"
 }
 
 # $1 OPPONENT
-on_new_game()
+_on_new_game()
 {
     local opponent=$1
     bash_n_state=GAME
@@ -97,17 +97,17 @@ on_new_game()
 }
 
 # $1 TURN HASH
-on_execute_turn()
+_on_execute_turn()
 {
     local hash=$1
     calculate_move
-    send INSERT $? "$hash"
+    _send INSERT $? "$hash"
 }
 
 # $1 RESULT is one of [WIN|DRAW|LOSE]
 # $2 CLIENT NAME that scored the result
 # $3 REASON of the result
-on_game_result()
+_on_game_result()
 {
     local result=$1 who=$2 why=$3
     bash_n_state=SEASON
@@ -120,28 +120,28 @@ start_client()
     local name=$1
     
     bash_n_state=CONNECTING
-    send REGISTER "$name"
+    _send REGISTER "$name"
 
     while IFS=\; read -ra line; do
 	local cmd=${line[0]}
 	case "$bash_n_state-$cmd" in
 	    CONNECTING-NEW\ SEASON)
-		on_new_season "${line[1]}"
+		_on_new_season "${line[1]}"
 		;;
 	    SEASON-NEW\ GAME)
-		on_new_game "${line[1]}"
+		_on_new_game "${line[1]}"
 		;;
 	    GAME-YOURTURN)
-		on_execute_turn "${line[1]}"
+		_on_execute_turn "${line[1]}"
 		;;
 	    GAME-TOKEN\ INSERTED)
 		record_move "${line[1]}" "${line[2]}"
 		;;
 	    GAME-RESULT)
-		on_game_result "${line[1]}" "${line[2]}" "${line[3]}"
+		_on_game_result "${line[1]}" "${line[2]}" "${line[3]}"
 		;;
 	    *)
-		die "received unknown command <$cmd> in state <$bash_n_state>"
+		_die "received unknown command <$cmd> in state <$bash_n_state>"
 		;;
 	esac
     done
