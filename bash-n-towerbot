@@ -55,7 +55,7 @@ record_move()
 {
     local who=$1 column=$2
     field[$column]=$((${field[$column]} + 1))
-    log "${field[*]}"
+    echo "${field[*]}"
 }
 
 game_start()
@@ -68,7 +68,7 @@ game_start()
 
 game_end()
 {
-    log "$@"
+    echo "$@"
 }
 
 start_client towerbot

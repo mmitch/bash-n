@@ -46,7 +46,7 @@ game_start()
 
 game_end()
 {
-    log "$@"
+    echo "$@"
 }
 
 start_client failbot
