@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# bash-n-failbot.test - dumb integration tests for bash-n-failbot
+#
+# Copyright (C) 2019  Christian Garbs <mitch@cgarbs.de>
+# Licensed under GNU GPL v3 or later.
+#
+# This file is part of bash-n.
+#
+# bash-n is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# bash-n is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with bash-n.  If not, see <http://www.gnu.org/licenses/>.
+
+run_bot()
+{
+    ./bash-n-failbot 2>/dev/null
+}
+
+############################
+
+test_single_fake_game_does_not_fail()
+{
+    run_bot <<EOF
+NEW SEASON;abcdef
+NEW GAME;OTHER-NAME
+YOURTURN;1234
+TOKEN INSERTED;failbot;8
+RESULT;LOST;failbot;column out of range
+EOF
+}
+
+test_multiple_fake_games_do_not_fail()
+{
+    run_bot <<EOF
+NEW SEASON;abcdef
+NEW GAME;OTHER-NAME
+YOURTURN;1234
+TOKEN INSERTED;failbot;8
+RESULT;LOST;failbot;column out of range
+NEW GAME;OTHER-NAME
+TOKEN INSERTED;OTHER-NAME;7
+YOURTURN;2234
+TOKEN INSERTED;failbot;8
+RESULT;LOST;failbot;column out of range
+EOF
+}
+
+############################
+
+source bash-tests
