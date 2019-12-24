@@ -127,7 +127,7 @@ _assert_variable()
 {
     local variable=$1 verb=$2 expected=$3
 
-    echo -n "   check \$$variable: " >&2
+    echo -n "    check \$$variable: " >&2
 
     case $verb in
 	is)
@@ -143,7 +143,7 @@ _assert_variable()
 
 _assert_stdout()
 {
-    echo -n "   check stdout: " >&2
+    echo -n "    check stdout: " >&2
 
     export tmpdir
     (
@@ -165,7 +165,7 @@ _run_test()
 {
     local test_stdout=$tmpdir/stdout
 
-    echo "$test_name" >&2
+    echo "  $test_name" >&2
     before_test
     $test_name > "$test_stdout" || fail "execution failed"
     test_ok_count=$((test_ok_count + 1))
