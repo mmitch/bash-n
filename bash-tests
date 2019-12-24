@@ -86,6 +86,13 @@ _setup_colors()
     echo -n $term_normal
 }
 
+_setup_test_name()
+{
+    test_script=${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}
+    test_script=${test_script##/*}
+    test_script=${test_script:-unknown}
+}
+
 _create_tmpdir()
 {
     tmpdir=$(mktemp -d)
@@ -169,6 +176,7 @@ _run_test()
 # test execution
 #
 
+_setup_test_name
 _setup_colors
 _create_tmpdir
 _scan_test_methods
@@ -188,7 +196,7 @@ else
     echo -n $term_error >&2
 fi
 
-printf "%d/%d tests ok%s\n" $test_ok_count $test_count $term_normal >&2
+printf "%s: %d/%d tests ok%s\n" $test_script $test_ok_count $test_count $term_normal >&2
 
 if $tests_missing; then
     fail "some test executions are missing!"
