@@ -41,7 +41,7 @@ sub debug(@)
     return; # no logging
     
     my ($format, @params) = @_;
-    printf STDERR "$format\n", @_;
+    printf STDERR "$format\n", @params;
 }
 
 sub parse_commandline_parameters()
