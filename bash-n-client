@@ -25,7 +25,7 @@
 # overwrite these hooks with your own strategy
 
 # gets called when it is our turn
-# RETURN the column number [1-7] of your move
+# RETURN the column number [0-6] of your move
 calculate_move()
 {
     _die "no implementation of calculate_move() - overwrite this function!"
@@ -33,7 +33,7 @@ calculate_move()
 
 # gets called when the server has received a move in the current game
 # $1 CLIENT NAME that made the move
-# $2 COLUMN [1-7] where the move was made
+# $2 COLUMN [0-6] where the move was made
 record_move()
 {
     _die "no implementation of record_move() - overwrite this function!"

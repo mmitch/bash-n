@@ -3,7 +3,7 @@
 # bash-n-towerbot - very simple bot to demonstrate the bash-n-client library
 #
 #    towerbot implements this simple strategy:
-#       $column := 4
+#       $column := 3
 #       repeat forever {
 #          if $column is filled then $column := random non-filled column
 #          make move in $column
@@ -39,7 +39,7 @@ calculate_move()
     fi
     
     while true; do
-	column=$(( ($RANDOM % 7) + 1)) # this will be biased!
+	column=$(( $RANDOM % 7 )) # this will be biased!
 	if column_is_available; then
 	    return $column
 	fi
@@ -60,10 +60,10 @@ record_move()
 
 game_start()
 {
-    for column in 1 2 3 4 5 6 7; do
+    for column in 0 1 2 3 4 5 6; do
 	field[$column]=0
     done
-    column=4
+    column=3
 }
 
 game_end()

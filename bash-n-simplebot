@@ -35,7 +35,7 @@ calculate_move()
 {
     local column
     while true; do
-	column=$(( ($RANDOM % 7) + 1)) # this will be biased!
+	column=$(( $RANDOM % 7 )) # this will be biased!
 	if [ ${field[$column]} -lt 6 ]; then
 	    return $column
 	fi
@@ -52,7 +52,7 @@ record_move()
 game_start()
 {
     local column
-    for column in 1 2 3 4 5 6 7; do
+    for column in 0 1 2 3 4 5 6; do
 	field[$column]=0
     done
 }
