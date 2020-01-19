@@ -65,7 +65,7 @@ sub open_listening_udp_port($)
     my $recv = new IO::Socket::INET( Proto => 'udp', LocalPort => $local_port, ReusePort => 1 );
     die "error creating listening socket: $!\n" unless $recv;
     
-    debug "listening on port %d\n", $recv->sockport();
+    debug "listening on port %d", $recv->sockport();
 
     return $recv;
 }
