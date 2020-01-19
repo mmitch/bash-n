@@ -2,7 +2,7 @@
 
 # bash-n-slothbot.test - dumb integration tests for bash-n-slothbot
 #
-# Copyright (C) 2019  Christian Garbs <mitch@cgarbs.de>
+# Copyright (C) 2019, 2020  Christian Garbs <mitch@cgarbs.de>
 # Licensed under GNU GPL v3 or later.
 #
 # This file is part of bash-n.
@@ -30,6 +30,7 @@ run_bot()
 test_single_fake_game_does_not_fail()
 {
     run_bot <<EOF
+Welcome slothbot
 NEW SEASON;abcdef
 NEW GAME;OTHER-NAME
 YOURTURN;1234
@@ -40,6 +41,7 @@ EOF
 test_multiple_fake_games_do_not_fail()
 {
     run_bot <<EOF
+Welcome slothbot
 NEW SEASON;abcdef
 NEW GAME;OTHER-NAME
 YOURTURN;1234

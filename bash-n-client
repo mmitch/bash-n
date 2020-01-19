@@ -2,7 +2,7 @@
 
 # bash-n-client - bash library for connect-n game clients
 #
-# Copyright (C) 2019  Christian Garbs <mitch@cgarbs.de>
+# Copyright (C) 2019, 2020  Christian Garbs <mitch@cgarbs.de>
 # Licensed under GNU GPL v3 or later.
 #
 # This file is part of bash-n.
@@ -74,6 +74,11 @@ _send()
     echo "$*" >&3
 }
 
+_on_connected()
+{
+    bash_n_state=CONNECTED
+}
+
 # $1 SEASON HASH
 _on_new_season()
 {
@@ -137,7 +142,11 @@ start_client()
     while IFS=\; read -ra line; do
 	local cmd=${line[0]}
 	case "$bash_n_state-$cmd" in
-	    CONNECTING-NEW\ SEASON)
+	    CONNECTING-"Welcome $name")
+		_on_connected
+		;;
+	    CONNECTED-NEW\ SEASON) ;&
+	    SEASON-NEW\ SEASON)
 		_on_new_season "${line[1]}"
 		;;
 	    SEASON-NEW\ GAME)
