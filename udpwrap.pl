@@ -121,6 +121,7 @@ sub copy_data_from_bot_to_udp($$)
     my ($bot_out, $udp_out) = @_;
     
     my $line = <$bot_out>;
+    return unless $line;
     chomp $line;
     debug " >>> %s", $line;
     $udp_out->send($line);
