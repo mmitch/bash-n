@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# bash-n-client - bash library for connect-n game clients
+# bash-n-client - bash library for connected-n game clients
 #
 # Copyright (C) 2019, 2020  Christian Garbs <mitch@cgarbs.de>
 # Licensed under GNU GPL v3 or later.
