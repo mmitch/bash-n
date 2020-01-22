@@ -113,6 +113,17 @@ _on_game_result()
     game_end "$result" "$who" "$why"
 }
 
+# $1 CLIENT NAME reveived from server
+# $2 CLIENT NAME sent to server
+_check_client_name()
+{
+    local actual=$1 expected=$2
+
+    if [ "$actual" != "$expected" ]; then
+	_die "server sent WELCOME with bot name <$actual> instead of <$expected>"
+    fi
+}
+
 # set up filedescriptors:
 # 0 is input from server via UDP
 # 1 is the tty if it can be determined, regular stderr otherwise
@@ -143,6 +154,7 @@ start_client()
 	local cmd=${line[0]}
 	case "$bash_n_state-$cmd" in
 	    CONNECTING-WELCOME)
+		_check_client_name "${line[1]}" "$name"
 		_on_connected
 		;;
 	    CONNECTED-NEW\ SEASON) ;&

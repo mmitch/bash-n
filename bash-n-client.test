@@ -85,6 +85,20 @@ REGISTER;MY-NAME
 EOF
 }
 
+test_welcome_message_with_wrong_name_exits_client()
+{
+    exec <<EOF
+WELCOME;SOMEBODY-ELSE
+EOF
+
+    start_client MY-NAME
+
+    assert_that stdout <<EOF
+REGISTER;MY-NAME
+!!ERROR!! server sent WELCOME with bot name <SOMEBODY-ELSE> instead of <MY-NAME>
+EOF
+}
+
 test_on_season_start_a_join_is_sent()
 {
     exec <<EOF
