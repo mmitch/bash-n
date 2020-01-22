@@ -52,7 +52,7 @@ example:
 This will also work for game clients not using `bash-n-client` and/or
 written in another language.  Any game client that talks the game
 protocol via stdin/stdout can be wrapped with `udpwrap.pl`, removing
-the need to implement the low-leven network stuff.
+the need to implement the low-level network stuff.
 
 
 project location
