@@ -30,7 +30,7 @@ run_bot()
 test_single_fake_game_does_not_fail()
 {
     run_bot <<EOF
-Welcome slothbot
+WELCOME;slothbot
 NEW SEASON;abcdef
 NEW GAME;OTHER-NAME
 YOURTURN;1234
@@ -41,7 +41,7 @@ EOF
 test_multiple_fake_games_do_not_fail()
 {
     run_bot <<EOF
-Welcome slothbot
+WELCOME;slothbot
 NEW SEASON;abcdef
 NEW GAME;OTHER-NAME
 YOURTURN;1234

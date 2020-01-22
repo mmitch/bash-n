@@ -30,7 +30,7 @@ run_bot()
 test_single_fake_game_does_not_fail()
 {
     run_bot <<EOF
-Welcome simplebot
+WELCOME;simplebot
 NEW SEASON;abcdef
 NEW GAME;OTHER-NAME
 YOURTURN;1234
@@ -51,7 +51,7 @@ EOF
 test_multiple_fake_games_do_not_fail()
 {
     run_bot <<EOF
-Welcome simplebot
+WELCOME;simplebot
 NEW SEASON;abcdef
 NEW GAME;OTHER-NAME
 YOURTURN;1234

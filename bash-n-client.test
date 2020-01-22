@@ -88,7 +88,7 @@ EOF
 test_on_season_start_a_join_is_sent()
 {
     exec <<EOF
-Welcome MY-NAME
+WELCOME;MY-NAME
 NEW SEASON;58ca8b44
 EOF
 
@@ -103,7 +103,7 @@ EOF
 test_season_start_sets_state_season()
 {
     exec <<EOF
-Welcome MY-NAME
+WELCOME;MY-NAME
 NEW SEASON;58ca8b44
 EOF
 
@@ -115,7 +115,7 @@ EOF
 test_on_game_start_nothing_is_sent()
 {
     exec <<EOF
-Welcome MY-NAME
+WELCOME;MY-NAME
 NEW SEASON;58ca8b44
 NEW GAME;OTHER-NAME
 EOF
@@ -131,7 +131,7 @@ EOF
 test_game_start_sets_state_game()
 {
     exec <<EOF
-Welcome MY-NAME
+WELCOME;MY-NAME
 NEW SEASON;58ca8b44
 NEW GAME;OTHER-NAME
 EOF
@@ -144,7 +144,7 @@ EOF
 test_game_start_records_opponent()
 {
     exec <<EOF
-Welcome MY-NAME
+WELCOME;MY-NAME
 NEW SEASON;58ca8b44
 NEW GAME;OTHER-NAME
 EOF
@@ -157,7 +157,7 @@ EOF
 test_on_turn_a_tile_is_placed()
 {
     exec <<EOF
-Welcome MY-NAME
+WELCOME;MY-NAME
 NEW SEASON;58ca8b44
 NEW GAME;OTHER-NAME
 YOURTURN;758f30a5
@@ -175,7 +175,7 @@ EOF
 test_on_token_inserted_nothing_is_sent()
 {
     exec <<EOF
-Welcome MY-NAME
+WELCOME;MY-NAME
 NEW SEASON;58ca8b44
 NEW GAME;OTHER-NAME
 TOKEN INSERTED;MY-NAME;2
@@ -194,7 +194,7 @@ EOF
 test_placed_tokens_are_recorded()
 {
     exec <<EOF
-Welcome MY-NAME
+WELCOME;MY-NAME
 NEW SEASON;58ca8b44
 NEW GAME;OTHER-NAME
 TOKEN INSERTED;MY-NAME;2
@@ -210,7 +210,7 @@ EOF
 test_on_game_result_nothing_is_sent()
 {
     exec <<EOF
-Welcome MY-NAME
+WELCOME;MY-NAME
 NEW SEASON;58ca8b44
 NEW GAME;OTHER-NAME
 RESULT;DRAW;MY-NAME;the board is full
@@ -227,7 +227,7 @@ EOF
 test_game_result_is_passed_on()
 {
     exec <<EOF
-Welcome MY-NAME
+WELCOME;MY-NAME
 NEW SEASON;58ca8b44
 NEW GAME;OTHER-NAME
 RESULT;WIN;OTHER-NAME;a better bot
@@ -243,7 +243,7 @@ EOF
 test_game_result_sets_state_season()
 {
     exec <<EOF
-Welcome MY-NAME
+WELCOME;MY-NAME
 NEW SEASON;58ca8b44
 NEW GAME;OTHER-NAME
 RESULT;WIN;OTHER-NAME;a better bot
@@ -257,7 +257,7 @@ EOF
 test_new_season_can_be_started_after_game_is_finished()
 {
     exec <<EOF
-Welcome MY-NAME
+WELCOME;MY-NAME
 NEW SEASON;58ca8b44
 NEW GAME;OTHER-NAME
 RESULT;WIN;OTHER-NAME;a better bot

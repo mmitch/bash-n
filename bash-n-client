@@ -142,7 +142,7 @@ start_client()
     while IFS=\; read -ra line; do
 	local cmd=${line[0]}
 	case "$bash_n_state-$cmd" in
-	    CONNECTING-"Welcome $name")
+	    CONNECTING-WELCOME)
 		_on_connected
 		;;
 	    CONNECTED-NEW\ SEASON) ;&
