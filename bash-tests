@@ -134,16 +134,21 @@ _assert_variable()
 	    _assert_equals "${!variable}" "$expected"
 	    ;;
 	*)
-	    fail "unknown verb <$verb> in assert_variable" >&2
+	    fail "unknown verb <$verb> in <assert_that variable>" >&2
 	    ;;
     esac
 
     echo "ok" >&2
 }
 
+# $1 VERB describing the check
 _assert_stdout()
 {
+    local verb=$1
+
     echo -n "    check stdout: " >&2
+
+    [ "$verb" != 'is' ] && fail "unknown verb <$verb> in <assert_that stdout>"
 
     export tmpdir
     (

@@ -80,7 +80,7 @@ test_start_client_sends_registration()
 
     start_client MY-NAME
     
-    assert_that stdout <<EOF
+    assert_that stdout is <<EOF
 REGISTER;MY-NAME
 EOF
 }
@@ -93,7 +93,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that stdout <<EOF
+    assert_that stdout is <<EOF
 REGISTER;MY-NAME
 !!ERROR!! server sent WELCOME with bot name <SOMEBODY-ELSE> instead of <MY-NAME>
 EOF
@@ -108,7 +108,7 @@ EOF
 
     start_client MY-NAME
     
-    assert_that stdout <<EOF
+    assert_that stdout is <<EOF
 REGISTER;MY-NAME
 JOIN;58ca8b44
 EOF
@@ -136,7 +136,7 @@ EOF
 
     start_client MY-NAME
     
-    assert_that stdout <<EOF
+    assert_that stdout is <<EOF
 REGISTER;MY-NAME
 JOIN;58ca8b44
 EOF
@@ -179,7 +179,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that stdout <<EOF
+    assert_that stdout is <<EOF
 REGISTER;MY-NAME
 JOIN;58ca8b44
 INSERT;4;758f30a5
@@ -199,7 +199,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that stdout <<EOF
+    assert_that stdout is <<EOF
 REGISTER;MY-NAME
 JOIN;58ca8b44
 EOF
@@ -232,7 +232,7 @@ EOF
 
     start_client MY-NAME
 
-    assert_that stdout <<EOF
+    assert_that stdout is <<EOF
 REGISTER;MY-NAME
 JOIN;58ca8b44
 EOF
