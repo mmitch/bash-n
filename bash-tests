@@ -43,7 +43,7 @@ assert_that()
 	    _assert_stdout "${@}"
 	    ;;
 	*)
-	    fail "unknown test subject <$subject> in assert_that" >&2
+	    fail "unknown test subject <$subject> in assert_that"
 	    ;;
     esac
 }
@@ -134,7 +134,7 @@ _assert_variable()
 	    _assert_equals "${!variable}" "$expected"
 	    ;;
 	*)
-	    fail "unknown verb <$verb> in <assert_that variable>" >&2
+	    fail "unknown verb <$verb> in <assert_that variable>"
 	    ;;
     esac
 
