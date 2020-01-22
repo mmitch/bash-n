@@ -155,7 +155,7 @@ _assert_stdout()
 	    diff -Narup expected actual >&2
 	    fail "!! output differs"
 	fi
-    )
+    ) || exit 1
 
     echo "ok" >&2
 }

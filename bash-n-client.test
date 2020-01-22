@@ -25,9 +25,9 @@ before_test()
     source bash-n-client
 
     # die(): overwrite exit with return, otherwise the whole test stops
-    die()
+    _die()
     {
-	echo "$*"
+	_send "!!ERROR!! $*"
 	return 1
     }
 
