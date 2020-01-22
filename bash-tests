@@ -73,7 +73,7 @@ _add_empty_before_test_if_missing()
 
 _setup_colors()
 {
-    if tput sgr0 2>&1 >/dev/null; then
+    if tput sgr0 >/dev/null 2>&1; then
 	term_normal=$(tput sgr0)
 	term_error=$(tput setaf 1)
 	term_success=$(tput setaf 2)
