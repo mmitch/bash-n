@@ -62,5 +62,5 @@ game_end()
     echo "$@"
 }
 
-start_client simplebot
+start_client bash-n-simplebot
 

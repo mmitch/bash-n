@@ -30,29 +30,29 @@ run_bot()
 test_single_fake_game_does_not_fail()
 {
     run_bot <<EOF
-WELCOME;failbot
+WELCOME;bash-n-failbot
 NEW SEASON;abcdef
 NEW GAME;OTHER-NAME
 YOURTURN;1234
-TOKEN INSERTED;failbot;8
-RESULT;LOST;failbot;column out of range
+TOKEN INSERTED;bash-n-failbot;8
+RESULT;LOST;bash-n-failbot;column out of range
 EOF
 }
 
 test_multiple_fake_games_do_not_fail()
 {
     run_bot <<EOF
-WELCOME;failbot
+WELCOME;bash-n-failbot
 NEW SEASON;abcdef
 NEW GAME;OTHER-NAME
 YOURTURN;1234
-TOKEN INSERTED;failbot;8
-RESULT;LOST;failbot;column out of range
+TOKEN INSERTED;bash-n-failbot;8
+RESULT;LOST;bash-n-failbot;column out of range
 NEW GAME;OTHER-NAME
 TOKEN INSERTED;OTHER-NAME;7
 YOURTURN;2234
-TOKEN INSERTED;failbot;8
-RESULT;LOST;failbot;column out of range
+TOKEN INSERTED;bash-n-failbot;8
+RESULT;LOST;bash-n-failbot;column out of range
 EOF
 }
 

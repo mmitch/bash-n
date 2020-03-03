@@ -30,26 +30,26 @@ run_bot()
 test_single_fake_game_does_not_fail()
 {
     run_bot <<EOF
-WELCOME;slothbot
+WELCOME;bash-n-slothbot
 NEW SEASON;abcdef
 NEW GAME;OTHER-NAME
 YOURTURN;1234
-RESULT;LOST;slothbot;timeout
+RESULT;LOST;bash-n-slothbot;timeout
 EOF
 }
 
 test_multiple_fake_games_do_not_fail()
 {
     run_bot <<EOF
-WELCOME;slothbot
+WELCOME;bash-n-slothbot
 NEW SEASON;abcdef
 NEW GAME;OTHER-NAME
 YOURTURN;1234
-RESULT;LOST;slothbot;timeout
+RESULT;LOST;bash-n-slothbot;timeout
 NEW GAME;OTHER-NAME
 TOKEN INSERTED;OTHER-NAME;7
 YOURTURN;2234
-RESULT;LOST;slothbot;timeout
+RESULT;LOST;bash-n-slothbot;timeout
 EOF
 }
 

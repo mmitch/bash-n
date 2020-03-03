@@ -49,4 +49,4 @@ game_end()
     echo "$@"
 }
 
-start_client failbot
+start_client bash-n-failbot

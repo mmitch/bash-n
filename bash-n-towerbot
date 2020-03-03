@@ -71,4 +71,4 @@ game_end()
     echo "$@"
 }
 
-start_client towerbot
+start_client bash-n-towerbot
