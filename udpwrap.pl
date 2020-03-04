@@ -35,13 +35,10 @@ use warnings;
 use IO::Socket::INET;
 use IO::Select;
 use IPC::Open2;
-use sigtrap 'handler', \&unregister_bot, 'INT', 'PIPE';
-
-my $udp_out;
 
 sub debug(@)
 {
-    #return; # no logging
+    return; # no logging
     
     my ($format, @params) = @_;
     printf STDERR "$format\n", @params;
@@ -130,26 +127,11 @@ sub copy_data_from_bot_to_udp($$)
     $udp_out->send($line);
 }
 
-sub unregister_bot($)
-{
-    my ($signal) = @_;
-
-    debug " !!! handle SIG$signal - unregister";
-
-    $udp_out->send('UNREGISTER');
-
-    if ($signal eq 'INT') {
-	exit 0;
-    } else {
-	exit 1;
-    }
-}
-
 my ($local_port, $server_addr, $bot_cmd) = parse_commandline_parameters;
 
 my $udp_in = open_listening_udp_port ($local_port);
 
-$udp_out = open_udp_connection_to_server $local_port, $server_addr;
+my $udp_out = open_udp_connection_to_server $local_port, $server_addr;
 
 my ($bot_in, $bot_out) = start_bot $bot_cmd;
 
