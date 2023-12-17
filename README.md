@@ -66,7 +66,7 @@ copyright
 
 bash-n - bash library for connect-n game clients
 
-Copyright (C) 2019, 2020  Christian Garbs <mitch@cgarbs.de>  
+Copyright (C) 2019, 2020, 2023  Christian Garbs <mitch@cgarbs.de>  
 Licensed under GNU GPL v3 or later.
 
 bash-n is free software: you can redistribute it and/or modify

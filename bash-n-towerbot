@@ -12,7 +12,7 @@
 #    To connect to a SERVER on PORT via UDP, run this script like this:
 #    $ socat udp:SERVER:PORT exec:bash-n-simplebot
 #
-# Copyright (C) 2019  Christian Garbs <mitch@cgarbs.de>
+# Copyright (C) 2019, 2023  Christian Garbs <mitch@cgarbs.de>
 # Licensed under GNU GPL v3 or later.
 #
 # This file is part of bash-n.
@@ -35,11 +35,11 @@ source bash-n-client
 calculate_move()
 {
     if column_is_available; then
-	return $column
+	return "$column"
     fi
     
     while true; do
-	column=$(( $RANDOM % 7 )) # this will be biased!
+	column=$(( RANDOM % 7 )) # this will be biased!
 	if column_is_available; then
 	    return $column
 	fi
@@ -48,20 +48,20 @@ calculate_move()
 
 column_is_available()
 {
-    [ ${field[$column]} -lt 6 ]
+    [ "${field[column]}" -lt 6 ]
 }
 
 record_move()
 {
-    local who=$1 column=$2
-    field[$column]=$((${field[$column]} + 1))
+    local column=$2 # who=$1 (unused)
+    field[column]=$((${field[$column]} + 1))
     echo "${field[*]}"
 }
 
 game_start()
 {
     for column in 0 1 2 3 4 5 6; do
-	field[$column]=0
+	field[column]=0
     done
     column=3
 }
