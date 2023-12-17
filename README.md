@@ -1,6 +1,10 @@
 bash-n
 ======
 
+[![Build status](https://github.com/mmitch/bash-n/workflows/Tests/badge.svg)](https://github.com/mmitch/bash-n/actions?query=workflow%3ATests)
+[![GPL 3+](https://img.shields.io/badge/license-GPL%203%2B-blue.svg)](http://www.gnu.org/licenses/gpl-3.0-standalone.html)
+
+
 _bash-n_ is a library to simplify writing
 [connected-n](https://github.com/fiduciagad/connected-n) game clients
 in bash.
