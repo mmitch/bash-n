@@ -9,3 +9,6 @@ jobs:
       run: make test
     - name: shellcheck
       uses: ludeeus/action-shellcheck@2.0.0
+      with:
+        check_together: 'yes'
+        additional_files: 'bash-n-client'
