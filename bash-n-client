@@ -100,6 +100,7 @@ _on_execute_turn()
 {
     local hash=$1
     calculate_move
+    # shellcheck disable=SC2317
     _send INSERT $? "$hash"
 }
 
